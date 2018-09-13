@@ -39,9 +39,10 @@ int getline(char s[], int lim)
 void remtrwh(char s[], int len)
 {
   int i = len;
-
   while (s[i] <= ' ')
     --i;
   s[i+1] = '\n';
   s[i+2] = '\0';
+  if (i == -3)
+    s[0] = '\0';
 }
