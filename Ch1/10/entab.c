@@ -1,6 +1,8 @@
 #include <stdio.h>
 #define TAB_WIDTH 4
 #define MAXLINE 1000
+#define IN_W 1
+#define OUT_W 0
 
 int getline(char line[], int maxline);
 void entab(char line[], int length);
@@ -34,46 +36,54 @@ int getline(char s[], int lim)
 
 void entab(char s[], int len)
 {
-  int i, j, t = 0;
-  int nt = 0, ns = 0;
+  int i, j, w, spaces = 0, displacement = 0;
+  int whitespace;
+  char scopy[len];
+
+  for (i = 0; i < len; ++i)
+    scopy[i] = s[i];
+
+  whitespace = ((s[i] == ' ') || (s[i] == '\t')) ? IN_W : OUT_W;
+
   for (i = 0, j = 0; i <= len && j < MAXLINE; ++i, ++j)
   {
-    if (s[i] == ' ')
+    if (whitespace)
     {
-      ns++;
-      t++;
-    }
-    else if (s[i] == '\t')
-    {
-      t += (TAB_WIDTH - ((j - (ns + nt)) % TAB_WIDTH));
-      nt++;
-    }
-    else if (t > 0)
-    {
-      int number_of_tabs = (t / TAB_WIDTH);
-      t-= (TAB_WIDTH * number_of_tabs);
-      j -= (t + number_of_tabs);
-      while (number_of_tabs > 0)
+      if (scopy[i] == ' ')
       {
-        s[j] = '#';
-        number_of_tabs--;
-        nt--;
-        j++;
+        spaces++;
+        displacement++;
       }
-      while (t > 0)
+      else if (scopy[i] == '\t')
       {
-        s[j] = '-';
-        t--;
-        ns--;
-        j++;
+        spaces += (TAB_WIDTH - (spaces % TAB_WIDTH));
+        displacement++;
       }
-      nt = 0;
-      ns = 0;
-      t = 0;
-      number_of_tabs = 0;
+      else
+      {
+        whitespace = OUT_W;
+        j -= displacement;
+        displacement = 0;
+        for (w = 0; w < (spaces / TAB_WIDTH); w++)
+          s[j++] = '#';
+        for (w = 0; w < (spaces % TAB_WIDTH); w++)
+          s[j++] = '-';
+        i--;
+        j--;
+      }
     }
     else
-      s[j] = s[i];
+    {
+      if (scopy[i] == ' ' || scopy[i] == '\t')
+      {
+        whitespace = IN_W;
+        spaces = 0;
+        i--;
+        j--;
+      }
+      else
+        s[j] = scopy[i];
+    }
   }
   s[j] = '\0';
 }
