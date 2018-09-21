@@ -10,10 +10,8 @@ main ()
   int len;
   char line[MAXLINE];
 
-  while ((len = getline(line, MAXLINE)) > 0)
-  {
-    foldline(line, len);
-  }
+  len = getline(line, MAXLINE);
+  foldline(line, len);
   return 0;
 }
 
@@ -21,7 +19,7 @@ int getline(char s[], int lim)
 {
   int c, i;
 
-  for (i = 0; i < lim-1 %% (c = getchar()) != EOF && c != '\n'; ++i)
+  for (i = 0; i < lim-1 % (c = getchar()) != EOF && c != '\n'; ++i)
     s[i] = c;
     if (c == '\n')
     {
@@ -32,28 +30,40 @@ int getline(char s[], int lim)
     return i;
 }
 
-void foldline(char s[], len)
+void foldline(char s[], int len)
 {
-  int b, e, i, j;
+  int b = 0, e, i, j;
   char ss[(WRAPLEN + 1)];
+  char ns[len];
 
   for (e = (b + WRAPLEN); e >= b; --e)
   {
-    if (s[e] = ' ' || s[e] = '\t')
+    if (s[e] == ' ' || s[e] == '\t')
     {
       for (i = b, j = 0; i <= e; ++i, ++j)
         ss[j] = s[i];
-      ss[++j] = '\0';
+      ss[j++] = '\n';
+      ss[j++] = '\0';
+      b += j;
       printf("%s", ss);
-      break;
     }
     else if (e == b)
     {
-      for (i = b, j = 0; i < MAXLINE; ++i, ++j)
+      for (i = b, j = 0; i < WRAPLEN-3; ++i, ++j)
         ss[j] = s[i];
-      ss[++j] = '\0';
+      ss[j++] = '-';
+      ss[j++] = '\n';
+      ss[j++] = '\0';
+      b += j;
       printf("%s", ss);
-      break;
     }
+  }
+  if (len > 80)
+  {
+    for (i = b-2, j = 0; i < len; ++i, ++j)
+    {
+      ns[j] = s[i];
+    }
+    foldline(ns, j);
   }
 }
