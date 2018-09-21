@@ -36,34 +36,42 @@ void foldline(char s[], int len)
   char ss[(WRAPLEN + 1)];
   char ns[len];
 
-  for (e = (b + WRAPLEN); e >= b; --e)
+  if (len < 80)
   {
-    if (s[e] == ' ' || s[e] == '\t')
-    {
-      for (i = b, j = 0; i <= e; ++i, ++j)
-        ss[j] = s[i];
-      ss[j++] = '\n';
-      ss[j++] = '\0';
-      b += j;
-      printf("%s", ss);
-    }
-    else if (e == b)
-    {
-      for (i = b, j = 0; i < WRAPLEN-3; ++i, ++j)
-        ss[j] = s[i];
-      ss[j++] = '-';
-      ss[j++] = '\n';
-      ss[j++] = '\0';
-      b += j;
-      printf("%s", ss);
-    }
+    for (i = 0; i < len; ++i)
+      ns[i] = s[i];
+    ns[i] = '\0';
+    printf("%s", ns);
   }
-  if (len > 80)
+  else
   {
-    for (i = b-2, j = 0; i < len; ++i, ++j)
+    for (e = (b + WRAPLEN); e >= b; --e)
     {
-      ns[j] = s[i];
+      if (s[e] == ' ' || s[e] == '\t')
+      {
+        for (i = b, j = 0; i <= e; ++i, ++j)
+          ss[j] = s[i];
+        ss[j++] = '\n';
+        ss[j++] = '\0';
+        b += j;
+        printf("%s", ss);
+      }
+      else if (e == b)
+      {
+        for (i = b, j = 0; i < WRAPLEN-3; ++i, ++j)
+          ss[j] = s[i];
+        ss[j++] = '-';
+        ss[j++] = '\n';
+        ss[j++] = '\0';
+        b += j-1;
+        printf("%s", ss);
+      }
     }
-    foldline(ns, j);
+    if (len > 80)
+    {
+      for (i = b-2, j = 0; i < len; ++i, ++j)
+        ns[j] = s[i];
+      foldline(ns, j);
+    }
   }
 }

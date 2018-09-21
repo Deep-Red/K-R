@@ -1,3 +1,8 @@
 thisisalonglineoftexthtatwillhavetobewrappedwithoutreachingawhitespacecharact-
-rsothaticanworkonhyphenatingthelinebreak
-œ¤[
+erssothaticanworkonhyphenatingthelinebreakand now I will type some more text 
+into the line so we can see how it handles sections that do, indeed contain 
+whitespace. At leas the first 31 characters of an internal name are significant. 
+For function names and external variables, the number may be less than 31, 
+because external names may be used by assemblers and loaders over which the 
+languagehasnocontrol.forexternalnames,thestandardguaranteesuniquenessonlyfor6-
+charactersandasinglecase.
