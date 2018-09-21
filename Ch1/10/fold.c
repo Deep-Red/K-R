@@ -45,25 +45,25 @@ void foldline(char s[], int len)
   }
   else
   {
-    for (e = (b + WRAPLEN); e >= b; --e)
+    for (e = WRAPLEN; e >= b; --e)
     {
       if (s[e] == ' ' || s[e] == '\t')
       {
-        for (i = b, j = 0; i <= e; ++i, ++j)
-          ss[j] = s[i];
-        ss[j++] = '\n';
-        ss[j++] = '\0';
-        b += j;
+        for (i = 0; i <= e; ++i)
+          ss[i] = s[i];
+        ss[i++] = '\n';
+        ss[i++] = '\0';
+        b += i;
         printf("%s", ss);
       }
-      else if (e == b)
+      else if (e == 0)
       {
-        for (i = b, j = 0; i < WRAPLEN-3; ++i, ++j)
-          ss[j] = s[i];
-        ss[j++] = '-';
-        ss[j++] = '\n';
-        ss[j++] = '\0';
-        b += j-1;
+        for (i = 0; i < WRAPLEN-3; ++i)
+          ss[i] = s[i];
+        ss[i++] = '-';
+        ss[i++] = '\n';
+        ss[i] = '\0';
+        b += i;
         printf("%s", ss);
       }
     }
